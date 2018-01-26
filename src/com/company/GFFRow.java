@@ -1,17 +1,24 @@
 package com.company;
 
+
+public enum strand_direction{
+FORWARD,REVERSE, UNKNOWN
+}
+
+
 /**
  * Class to represent a row of a GFF file
  * Created by Christopher on 1/2/2018.
  */
 public class GFFRow {
+
     public String sequence;
     public String source;
     public String feature;
     public int start;
     public int end;
     public int score;
-    public char strand;
+    public strand_direction strand;
     public char frame;
     public char phase;
     public String attributes;
@@ -31,7 +38,7 @@ public class GFFRow {
      */
     private void parseRow(String row){
         //Split the row along any whitespace
-        String cols[] = row.split("\\s+");
+        String cols[] = row.split("\\t+");
 
 
         if(cols.length != 9){
@@ -53,7 +60,14 @@ public class GFFRow {
         }else{
             score = -1;
         }
-        strand = cols[6].charAt(0);
+        if(cols[6].equals("+")){
+            strand = strand_direction.FORWARD;
+        } else if(cols[6].equals("-")){
+            strand = strand_direction.REVERSE;
+        } else {
+            strand = strand_direction.UNKNOWN;
+        }
+
 
 
         if(isGFF3){
